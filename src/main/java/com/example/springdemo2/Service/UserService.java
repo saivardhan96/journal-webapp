@@ -5,6 +5,8 @@ import com.example.springdemo2.Entity.JournalEntity;
 import com.example.springdemo2.Entity.UserEntity;
 import com.example.springdemo2.Repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -38,12 +40,15 @@ public class UserService {
 
     public void saveUser(UserEntity userEntity){
         userRepo.save(userEntity);
-
     }
-    public void saveNewUSer(UserEntity user){
-        user.setRoles(List.of("USER"));
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepo.save(user);
+
+    public ResponseEntity<UserEntity> saveNewUSer(UserEntity user){
+        if(findByUserName(user.getUsername())==null){
+            user.setRoles(List.of("USER"));
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            return new ResponseEntity<>(userRepo.save(user), HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
     public void saveNewAdmin(UserEntity user){

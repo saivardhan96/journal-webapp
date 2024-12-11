@@ -21,4 +21,17 @@ public class EmailService {
         javaMailSender.send(mail);
     }
 
+    public String createMsg(String name, String passcode){
+        return "Hey,Thank you for creating account in our website. We are really happy to have you here and looking" +
+                " forward for a beautiful journey with us." +
+                " \n" +
+                "Your credentials are : \n" +
+                "Username: " + name +"\n"+
+                "Password: "+passcode+ "\n"+
+                " Feel free to reach out to us in case of any queries.\n" +
+                "Thank you, again.\n"+
+                "Team - Nirvana...\n" +
+                "Contact Us - help@nirvana.com | instagram.com/saivardhan96";
+    }
+
 }

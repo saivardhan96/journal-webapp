@@ -6,6 +6,7 @@ import com.example.springdemo2.Service.EmailService;
 import com.example.springdemo2.Service.UserDetailServiceImpl;
 import com.example.springdemo2.Service.UserService;
 import com.example.springdemo2.utils.JwtUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,7 +17,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Objects;
+
 @RestController
+@Slf4j
 @RequestMapping("/public")
 public class PublicController {
 
@@ -44,14 +48,23 @@ public class PublicController {
             return new ResponseEntity<>(jwt, HttpStatus.OK);
         }
         catch(Exception e){
-            System.out.println("Exception has occurred!!");
+            log.info("Error has occurred during auth.");
             return new ResponseEntity<>("Incorrect username or passcode.", HttpStatus.FORBIDDEN);
         }
     }
 
     @PostMapping("/new-user")
-    public void newUser(@RequestBody UserEntity user){
-        userService.saveNewUSer(user);
+    public ResponseEntity<String> newUser(@RequestBody UserEntity user){
+        String name = user.getUsername();
+        String password = user.getPassword();
+        String code  = userService.saveNewUSer(user).getStatusCode().toString();
+        log.info("code - {}" , code);
+        if (!Objects.equals(code, "409 CONFLICT")) {
+            String body = emailService.createMsg(name,password);
+            emailService.ssendMail("21211a05n9@bvrit.ac.in","Welcome to Spring Boot.",body);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+        else return new ResponseEntity<>("username is already taken or user exists already.", HttpStatus.CONFLICT);
     }
 
 
@@ -85,7 +98,7 @@ public class PublicController {
     @GetMapping("/health")
     public String healthCheck(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(auth.getName());
+        log.info("Username - {}", auth.getName());
         return "Working fine...";
     }
 
