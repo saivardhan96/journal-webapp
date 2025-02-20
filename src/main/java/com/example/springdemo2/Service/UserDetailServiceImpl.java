@@ -2,7 +2,6 @@ package com.example.springdemo2.Service;
 
 import com.example.springdemo2.Entity.UserEntity;
 import com.example.springdemo2.Repository.UserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,7 +14,6 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
     private final UserRepo userRepo;
 
-    @Autowired
     public UserDetailServiceImpl(UserRepo userRepo){ // constructor injection
         this.userRepo = userRepo;
     }

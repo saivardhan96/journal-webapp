@@ -4,7 +4,6 @@ package com.example.springdemo2.Service;
 import com.example.springdemo2.Entity.JournalEntity;
 import com.example.springdemo2.Entity.UserEntity;
 import com.example.springdemo2.Repository.JournalRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,11 +16,13 @@ import java.util.Optional;
 @Component
 public class JournalService {
 
+    private final JournalRepo journalRepo;
+    private final UserService userService;
 
-    @Autowired
-    private JournalRepo journalRepo;
-    @Autowired
-    private UserService userService;
+    public JournalService(JournalRepo journalRepo, UserService userService) {
+        this.journalRepo = journalRepo;
+        this.userService = userService;
+    }
 
     public List<JournalEntity> getJournals(){
         return journalRepo.findAll();

@@ -4,7 +4,6 @@ package com.example.springdemo2.Service;
 import com.example.springdemo2.Entity.JournalEntity;
 import com.example.springdemo2.Entity.UserEntity;
 import com.example.springdemo2.Repository.UserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,13 +17,14 @@ import java.util.Optional;
 @Component
 public class UserService {
 
-
-    @Autowired
-    private UserRepo userRepo;
-
-    @Autowired
-    private JournalService journalService;
+    private final UserRepo userRepo;
+    private final JournalService journalService;
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    public UserService(UserRepo userRepo, JournalService journalService) {
+        this.userRepo = userRepo;
+        this.journalService = journalService;
+    }
 
     public List<UserEntity> getAllUsers(){
         return userRepo.findAll();

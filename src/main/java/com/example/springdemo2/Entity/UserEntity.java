@@ -16,7 +16,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-@Document(collection = "Users")
+@Document(collection = "Users")     // in case of mysql, we use @Entity annotation.
 public class UserEntity {
     @Id
     private ObjectId id;

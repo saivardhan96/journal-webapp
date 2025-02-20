@@ -61,7 +61,7 @@ public class PublicController {
         log.info("code - {}" , code);
         if (!Objects.equals(code, "409 CONFLICT")) {
             String body = emailService.createMsg(name,password);
-            emailService.ssendMail("21211a05n9@bvrit.ac.in","Welcome to Spring Boot.",body);
+            emailService.sendMail("21211a05n9@bvrit.ac.in","Welcome to Spring Boot.",body);
             return new ResponseEntity<>(HttpStatus.CREATED);
         }
         else return new ResponseEntity<>("username is already taken or user exists already.", HttpStatus.CONFLICT);
